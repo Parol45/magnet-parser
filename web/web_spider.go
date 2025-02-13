@@ -1,4 +1,4 @@
-package main
+package web
 
 import (
 	"log"
@@ -33,11 +33,11 @@ func submain() {
 
 	for index < len(links) {
 		url := links[index]
-		urlOrigin := utils.ParseOriginUrl(url)
-		html := utils.GetHtmlByUrl(url)
+		urlOrigin := ParseOriginUrl(url)
+		html := GetHtmlByUrl(url)
 
 		// add all found links to queue
-		newLinks := utils.ParseAllLinks(html)
+		newLinks := ParseAllLinks(html)
 		for _, newLink := range newLinks {
 			if strings.HasPrefix(newLink, "http") {
 				if !utils.IsItemInArray(newLink, links) {
