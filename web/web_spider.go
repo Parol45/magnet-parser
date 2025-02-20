@@ -3,7 +3,7 @@ package web
 import (
 	"log"
 	"log/slog"
-	"magnet-parser/utils"
+	"magnet-parser/globals"
 	"os"
 	"strings"
 )
@@ -25,7 +25,7 @@ func appendLineToFile(magnet string) {
 }
 
 func submain() {
-	utils.SetupLogger("web_spider")
+	globals.SetupLogger("web_spider")
 
 	os.Remove("magnets.txt")
 	links := []string{"https://igg-games.ru/"}
@@ -40,11 +40,11 @@ func submain() {
 		newLinks := ParseAllLinks(html)
 		for _, newLink := range newLinks {
 			if strings.HasPrefix(newLink, "http") {
-				if !utils.IsItemInArray(newLink, links) {
+				if !globals.IsItemInArray(newLink, links) {
 					links = append(links, newLink)
 				}
 			} else if strings.HasPrefix(newLink, "/") && urlOrigin != "" {
-				if !utils.IsItemInArray(newLink, links) {
+				if !globals.IsItemInArray(newLink, links) {
 					links = append(links, urlOrigin+newLink)
 				}
 			} else if strings.HasPrefix(newLink, "magnet:?xt=urn:") {

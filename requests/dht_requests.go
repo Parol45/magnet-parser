@@ -3,10 +3,10 @@ package requests
 import (
 	"fmt"
 	"log/slog"
-	"magnet-parser/bencode"
+	"magnet-parser/dht_converters"
 )
 
-const id = "aaaaaaaaaaaaaaaaaaaa"
+const id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 const version = "aaaaaaaa"
 var transactionId = 0
 
@@ -23,7 +23,7 @@ func transIdToStr() string {
 
 func Ping() []byte {
 	resultingJson := fmt.Sprintf(pingFmt, id, transIdToStr(), version)
-	result, err := bencode.JSONToBencode(resultingJson)
+	result, err := dht_converters.JSONtoDHTPackage(resultingJson)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
@@ -33,7 +33,7 @@ func Ping() []byte {
 
 func GetPeers(hash string) []byte {
 	resultingJson := fmt.Sprintf(getPeersFmt, id, hash, transIdToStr(), version)
-	result, err := bencode.JSONToBencode(resultingJson)
+	result, err := dht_converters.JSONtoDHTPackage(resultingJson)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
@@ -43,7 +43,7 @@ func GetPeers(hash string) []byte {
 
 func FindNode(foreignId string) []byte {
 	resultingJson := fmt.Sprintf(findNodeFmt, id, foreignId, transIdToStr(), version)
-	result, err := bencode.JSONToBencode(resultingJson)
+	result, err := dht_converters.JSONtoDHTPackage(resultingJson)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
@@ -53,7 +53,7 @@ func FindNode(foreignId string) []byte {
 
 func AnnouncePeer(hash string, port int, token string) []byte {
 	resultingJson := fmt.Sprintf(announcePeerFmt, id, hash, port, token, transIdToStr(), version)
-	result, err := bencode.JSONToBencode(resultingJson)
+	result, err := dht_converters.JSONtoDHTPackage(resultingJson)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil

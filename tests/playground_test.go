@@ -3,6 +3,7 @@ package main
 import (
 	"container/list"
 	"fmt"
+	"testing"
 )
 
 func Foo() error {
@@ -20,7 +21,7 @@ const (
 	r CustomStringType = "4"
 )
 
-func main() {
+func TestPlayground(tee *testing.T) {
 	l := list.List{}
 	l.Init()
 
