@@ -1,18 +1,15 @@
-package bencode_converters
+package json
 
 import (
 	"errors"
 	"fmt"
+	"magnet-parser/globals"
 	"strconv"
 	"strings"
 )
 
-func byteIsDigit(symbol byte) bool {
-	return 47 < symbol && symbol < 58 || symbol == 45
-}
-
 func encodeNextElement(json string, index int) ([]byte, int, error) {
-	if byteIsDigit(json[index]) {
+	if globals.ByteIsDigit(json[index]) {
 		return encodeNumber(json, index)
 	} else if json[index] == '{' {
 		return encodeDict(json, index)
@@ -127,7 +124,7 @@ func encodeStringLiteral(json string, index int) ([]byte, int, error) {
 func encodeNumber(json string, index int) ([]byte, int, error) {
 	builder := strings.Builder{}
 	builder.WriteByte('i')
-	for index < len(json) && (byteIsDigit(json[index]) || json[index] == '-') {
+	for index < len(json) && (globals.ByteIsDigit(json[index]) || json[index] == '-') {
 		builder.WriteByte(json[index])
 		index++
 	}
@@ -138,7 +135,7 @@ func encodeNumber(json string, index int) ([]byte, int, error) {
 	return []byte(builder.String()), index - 1, nil
 }
 
-func JSONToBencode(json string) ([]byte, error) {
+func Encode(json string) ([]byte, error) {
 	var encodedBytes []byte
 	var err error
 	if len(json) > 0 {

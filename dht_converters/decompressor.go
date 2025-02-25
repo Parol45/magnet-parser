@@ -77,7 +77,3 @@ func encodeHash(literal string) ([]byte, error) {
 	}
 	return result, nil
 }
-
-func DHTPackageToJson() {
-
-}

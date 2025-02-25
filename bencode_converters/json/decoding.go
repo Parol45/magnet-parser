@@ -1,8 +1,9 @@
-package bencode_converters
+package json
 
 import (
 	"errors"
 	"fmt"
+	"magnet-parser/globals"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ func decodeNextElement(bytes []byte, index int) (string, int, error) {
 		return decodeDict(bytes, index)
 	} else if bytes[index] == 'l' {
 		return decodeList(bytes, index)
-	} else if byteIsDigit(bytes[index]) {
+	} else if globals.ByteIsDigit(bytes[index]) {
 		return decodeStringLiteral(bytes, index)
 	} else {
 		return "", len(bytes), errors.New(fmt.Sprintf("No known entity start for index: %d, symbol: '%s'", index, string(bytes[index])))
@@ -60,7 +61,7 @@ func decodeNumber(bytes []byte, index int) (string, int, error) {
 
 func decodeStringLiteral(bytes []byte, index int) (string, int, error) {
 	strLen := 0
-	for byteIsDigit(bytes[index]) {
+	for globals.ByteIsDigit(bytes[index]) {
 		strLen = strLen*10 + int(bytes[index]-'0')
 		index++
 	}
@@ -85,7 +86,7 @@ func decodeDict(bytes []byte, index int) (string, int, error) {
 	var value, key string
 	var err error
 	for index < len(bytes) && bytes[index] != 'e' {
-		if readingKey && byteIsDigit(bytes[index]) {
+		if readingKey && globals.ByteIsDigit(bytes[index]) {
 			key, index, err = decodeStringLiteral(bytes, index)
 			if err != nil {
 				return "", 0, err
@@ -114,7 +115,7 @@ func decodeDict(bytes []byte, index int) (string, int, error) {
 	return builder.String(), index + 1, err // +1 for 'e'
 }
 
-func BencodeToJSON(encodedStr []byte) (string, error) {
+func Decode(encodedStr []byte) (string, error) {
 	var decodedStr string
 	var err error
 	if len(encodedStr) > 0 {

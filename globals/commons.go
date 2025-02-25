@@ -16,7 +16,8 @@ func SetupLogger(logFileName string) {
 		Filename:   "./logs/" + logFileName + ".log",
 		MaxSize:    10, // megabytes
 		MaxBackups: 3,
-		MaxAge:     31, //days
+		MaxAge:     7, //days
+		Compress:   true,
 	}))
 }
 
@@ -42,4 +43,12 @@ func StringToUDPAddr(ip string) *net.UDPAddr {
 	}
 	port, _ := strconv.Atoi(byteAndPort[1])
 	return &net.UDPAddr{IP:ipBytes,Port:port,Zone:""}
+}
+
+func TakePointer[T any](item T) *T {
+	return &item
+}
+
+func ByteIsDigit(symbol byte) bool {
+	return 47 < symbol && symbol < 58 || symbol == 45
 }

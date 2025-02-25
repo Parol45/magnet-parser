@@ -2,7 +2,6 @@ package dht_converters
 
 import (
 	"fmt"
-	"magnet-parser/bencode_converters"
 	"strconv"
 	"strings"
 )
@@ -14,7 +13,6 @@ import (
 // t - transaction id (hex)
 // id - id of node (hex)
 // ip - ... (hex)
-
 func decodeIp(ipBytes []byte) string {
 	ip1, err1 := strconv.ParseInt(fmt.Sprintf("%x", ipBytes[0]), 16, 64)
 	ip2, err2 := strconv.ParseInt(fmt.Sprintf("%x", ipBytes[1]), 16, 64)
@@ -58,8 +56,4 @@ func tryDecodeIpOrHash(bytes []byte, key string) string {
 		return str[:lastIndex]
 	}
 	return decodeHash(bytes)
-}
-
-func JSONtoDHTPackage(json string) ([]byte, error) {
-	return bencode_converters.JSONToBencode(json)
 }
