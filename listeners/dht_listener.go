@@ -3,8 +3,9 @@ package listeners
 import (
 	"fmt"
 	"log/slog"
-	"magnet-parser/bencode_converters/json"
-	"magnet-parser/bencode_converters/obj"
+	"magnet-parser/bencode_json"
+	"magnet-parser/bencode_obj"
+	"magnet-parser/dht"
 	"net"
 	"strings"
 )
@@ -31,30 +32,35 @@ func processInputRequest(udpServer net.PacketConn, addr net.Addr, buf []byte) {
 		return
 	}
 	slog.Info(fmt.Sprintf("Encoded json is: %s", strings.ReplaceAll(string(buf), "\r", "")))
-	o, err := obj.Decode(buf)
-	if err != nil {
-		slog.Error(fmt.Sprintf("Error while converting bencode to json: %v\n", err))
-	}
-	println(o)
-	js, err := json.Decode(buf)
+	js, err := bencode_json.Decode(buf)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting bencode to json: %v\n", err))
 	} else {
 		slog.Info(fmt.Sprintf("Decoded json is: %s", js))
 	}
 	var bytes []byte
-	bytes, err = json.Encode(js)
+	bytes, err = bencode_json.Encode(js)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting bencode to json: %v\n", err))
 	} else {
 		slog.Info(fmt.Sprintf("Encoded json is: %s", strings.ReplaceAll(string(bytes), "\r", "")))
 	}
-	js, _ = json.Decode(bytes)
+	js, _ = bencode_json.Decode(bytes)
 	slog.Info(fmt.Sprintf("Decoded json is: %s", js))
-	bytes, err = json.Encode(js)
+	bytes, err = bencode_json.Encode(js)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting bencode to json: %v\n", err))
 	} else {
 		slog.Info(fmt.Sprintf("Encoded json is: %s", strings.ReplaceAll(string(bytes), "\r", "")))
 	}
+
+	o, err := bencode_obj.Decode(buf)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Error while converting bencode to obj: %v\n", err))
+	}
+	o, err = dht.Decompress(o)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Error while decompressing obj: %v\n", err))
+	}
+	println(o)
 }

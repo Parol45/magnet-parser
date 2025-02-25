@@ -1,7 +1,8 @@
-package dht_converters
+package dht
 
 import (
 	"fmt"
+	"magnet-parser/globals"
 	"strconv"
 	"strings"
 )
@@ -56,4 +57,22 @@ func tryDecodeIpOrHash(bytes []byte, key string) string {
 		return str[:lastIndex]
 	}
 	return decodeHash(bytes)
+}
+
+func Decompress(obj *globals.PackageType) (*globals.PackageType, error) {
+	if obj == nil {
+		return nil, nil
+	}
+	if len(obj.V) > 0 {
+		obj.V = decodeHash([]byte(obj.V))
+	}
+	if obj.R != nil {
+		if len(obj.R.Id) > 0 {
+			obj.R.Id = decodeHash([]byte(obj.R.Id))
+		}
+		if obj.R.Nodes != nil {
+			obj.R.Nodes = globals.TakePointer(decodeHash([]byte(*obj.R.Nodes)))
+		}
+	}
+	return obj, nil
 }

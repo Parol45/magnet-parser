@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-const id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+const id = "5ba5c0ac0727f52516dba42f4f6bc8ad097deba6"
 const version = "aaaaaaaa"
 
 var transactionId = 0
@@ -15,6 +15,7 @@ func transIdToStr() string {
 	return fmt.Sprintf("%08d", transactionId)
 }
 
+// arguments
 type Atype struct {
 	Id          string  `json:"id,omitempty"`
 	Target      *string `json:"target,omitempty"`
@@ -24,6 +25,7 @@ type Atype struct {
 	Token       *string `json:"token,omitempty"`
 }
 
+// response
 type Rtype struct {
 	Id     string   `json:"id,omitempty"`
 	Nodes  *string  `json:"nodes,omitempty"`

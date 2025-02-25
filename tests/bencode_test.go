@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"magnet-parser/bencode_converters/json"
+	"magnet-parser/bencode_json"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func TestJsonConversion(t *testing.T) {
 	// json keys sorted
 	firstOutJson := `{"abc":"zovebathohlov","iche":-42}`
 	// ------------------------------------------------------------------------------------------------------
-	bcode, err := json.Encode(firstInpJson)
+	bcode, err := bencode_json.Encode(firstInpJson)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,7 +20,7 @@ func TestJsonConversion(t *testing.T) {
 		t.Fatal(fmt.Sprintf("Failed at first test: %s != %s", string(bcode), firstBcode))
 	}
 	// ------------------------------------------------------------------------------------------------------
-	js, err := json.Decode([]byte(firstBcode))
+	js, err := bencode_json.Decode([]byte(firstBcode))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func TestJsonConversion(t *testing.T) {
 	secondBcode := "l4:ichei-42ee"
 	secondJson := `["iche",-42]`
 	// ------------------------------------------------------------------------------------------------------
-	bcode, err = json.Encode(secondJson)
+	bcode, err = bencode_json.Encode(secondJson)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func TestJsonConversion(t *testing.T) {
 		t.Fatal(fmt.Sprintf("Failed at second test: %s != %s", string(bcode), secondBcode))
 	}
 	// ------------------------------------------------------------------------------------------------------
-	js, err = json.Decode([]byte(secondBcode))
+	js, err = bencode_json.Decode([]byte(secondBcode))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -56,7 +56,7 @@ func TestJsonConversion(t *testing.T) {
 	// json keys sorted
 	complexJsonOut := `{"dataTransfers":[{"filterName":"min10_max20","gsonType":"OpcSourceFilterStorageDataTransfer","namespace":0,"opcName":"OPC_test","pollingInterval":1000,"sourceTag":"__dummy_saw300000|1_round1","storageTag":"a__dummy_saw300000|1_round1","type":"DOUBLE"}],"filters":{"empty":{},"min10_max20":{"approxType":"NEAREST","frozenSignalIntervalMs":10000,"interval":1,"jsFunc":"datapoint.Value = datapoint.Value*10; return datapoint","maxDelta":0,"maxValue":49,"minValue":-4,"timeoutMs":5000}}}`
 	// ------------------------------------------------------------------------------------------------------
-	bcode, err = json.Encode(complexJsonInp)
+	bcode, err = bencode_json.Encode(complexJsonInp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func TestJsonConversion(t *testing.T) {
 		t.Fatal(fmt.Sprintf("Failed at complex test: %s != %s", string(bcode), complexBcode))
 	}
 	// ------------------------------------------------------------------------------------------------------
-	js, err = json.Decode([]byte(complexBcode))
+	js, err = bencode_json.Decode([]byte(complexBcode))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,6 +73,5 @@ func TestJsonConversion(t *testing.T) {
 	}
 	// ------------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------------
-
 
 }

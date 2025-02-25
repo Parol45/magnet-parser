@@ -1,4 +1,4 @@
-package obj
+package bencode_obj
 
 import (
 	"errors"
@@ -183,6 +183,8 @@ func decodeMainMap(bytes []byte) (*globals.PackageType, error) {
 			return nil, errors.New(fmt.Sprintf("Dictionary key can be nothing but string. Index: %d, Symbol: '%s'", index, string(bytes[index])))
 		} else if !readingKey {
 			switch key {
+			case "e":
+				return nil, errors.New(string(bytes[index:])) // todo better error handling
 			case "t", "y", "q", "v":
 				var val string
 				val, index, err = decodeStringLiteral(bytes, index)
@@ -213,6 +215,8 @@ func decodeMainMap(bytes []byte) (*globals.PackageType, error) {
 					return nil, err
 				}
 				res.A = temp
+			default:
+				return nil, errors.New("unknown key: " + key)
 			}
 			readingKey = !readingKey
 		}

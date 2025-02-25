@@ -1,4 +1,4 @@
-package json
+package bencode_json
 
 import (
 	"errors"

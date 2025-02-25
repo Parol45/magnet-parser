@@ -1,9 +1,10 @@
-package dht_converters
+package dht
 
 import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"magnet-parser/globals"
 	"strconv"
 	"strings"
 )
@@ -76,4 +77,37 @@ func encodeHash(literal string) ([]byte, error) {
 		i++
 	}
 	return result, nil
+}
+
+func Compress(obj *globals.PackageType) (*globals.PackageType, error) {
+	if obj == nil {
+		return nil, nil
+	}
+	if len(obj.V) > 0 {
+		V, err := encodeHash(obj.V)
+		if err != nil {
+			return nil, err
+		}
+		obj.V = string(V)
+	}
+	if obj.A != nil {
+		if len(obj.A.Id) > 0 {
+			Id, err := encodeHash(obj.A.Id)
+			if err != nil {
+				return nil, err
+			}
+			obj.A.Id = string(Id)
+		}
+	}
+
+	if obj.R != nil {
+		if len(obj.R.Id) > 0 {
+			Id, err := encodeHash(obj.R.Id)
+			if err != nil {
+				return nil, err
+			}
+			obj.R.Id = string(Id)
+		}
+	}
+	return obj, nil
 }
