@@ -184,7 +184,7 @@ func decodeMainMap(bytes []byte) (*globals.PackageType, error) {
 		} else if !readingKey {
 			switch key {
 			case "e":
-				return nil, errors.New(string(bytes[index:])) // todo better error handling
+				return nil, errors.New(string(bytes[index+2:])) // todo better error handling
 			case "t", "y", "q", "v":
 				var val string
 				val, index, err = decodeStringLiteral(bytes, index)

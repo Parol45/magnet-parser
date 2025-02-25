@@ -62,5 +62,5 @@ func processInputRequest(udpServer net.PacketConn, addr net.Addr, buf []byte) {
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while decompressing obj: %v\n", err))
 	}
-	println(o)
+	println(o.ToString())
 }

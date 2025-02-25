@@ -1,6 +1,7 @@
 package globals
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -18,21 +19,29 @@ func transIdToStr() string {
 // arguments
 type Atype struct {
 	Id          string  `json:"id,omitempty"`
-	Target      *string `json:"target,omitempty"`
-	InfoHash    *string `json:"infoHash,omitempty"`
 	ImpliedPort *int    `json:"impliedPort,omitempty"`
+	InfoHash    *string `json:"infoHash,omitempty"`
 	Port        *int    `json:"port,omitempty"`
+	Target      *string `json:"target,omitempty"`
 	Token       *string `json:"token,omitempty"`
 }
 
 // response
 type Rtype struct {
 	Id     string   `json:"id,omitempty"`
-	Nodes  *string  `json:"nodes,omitempty"`
+	Nodes  *string  `json:"nodes,omitempty"` // compressed or json!
 	Token  *string  `json:"token,omitempty"`
 	Values []string `json:"values,omitempty"`
 }
 
+// a - arguments (dict)
+// r - response (dict)
+// id - id of node (hex)
+// ip - ... (hex)
+// q - method name (string)
+// t - transaction id (hex)
+// v - version (hex)
+// y - message type: r - response, q - query, e - error (string)
 type PackageType struct {
 	A *Atype `json:"a,omitempty"`
 	R *Rtype `json:"r,omitempty"`
@@ -91,4 +100,9 @@ func NewAnnouncePeerRequest(infoHash string, port int, token string) PackageType
 		V: version,
 		Y: "q",
 	}
+}
+
+func (p PackageType) ToString() string {
+	str, _ := json.Marshal(p)
+	return string(str)
 }

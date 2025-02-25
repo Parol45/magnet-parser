@@ -1,10 +1,8 @@
 package requests
 
 import (
-	"encoding/json"
 	"fmt"
 	"log/slog"
-	"magnet-parser/bencode_json"
 	"magnet-parser/bencode_obj"
 	"magnet-parser/dht"
 	"magnet-parser/globals"
@@ -32,12 +30,13 @@ func Ping() []byte {
 }
 
 func GetPeers(hash string) []byte {
-	js, err := json.Marshal(globals.NewGetPeersRequest(hash))
+	req := globals.TakePointer(globals.NewGetPeersRequest(hash))
+	req, err := dht.Compress(req)
 	if err != nil {
-		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
+		slog.Error(fmt.Sprintf("Error while compressing bencode obj: %v\n", err))
 		return nil
 	}
-	result, err := bencode_json.Encode(string(js))
+	result, err := bencode_obj.Encode(req)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
@@ -46,8 +45,13 @@ func GetPeers(hash string) []byte {
 }
 
 func FindNode(foreignId string) []byte {
-	resultingJson := fmt.Sprintf(findNodeFmt, "", foreignId, "1", "1234")
-	result, err := bencode_json.Encode(resultingJson)
+	req := globals.TakePointer(globals.NewFindNodeRequest(foreignId))
+	req, err := dht.Compress(req)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Error while compressing bencode obj: %v\n", err))
+		return nil
+	}
+	result, err := bencode_obj.Encode(req)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
@@ -56,8 +60,13 @@ func FindNode(foreignId string) []byte {
 }
 
 func AnnouncePeer(hash string, port int, token string) []byte {
-	resultingJson := fmt.Sprintf(announcePeerFmt, "", hash, port, token, "1", "1234")
-	result, err := bencode_json.Encode(resultingJson)
+	req := globals.TakePointer(globals.NewAnnouncePeerRequest(hash, port, token))
+	req, err := dht.Compress(req)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Error while compressing bencode obj: %v\n", err))
+		return nil
+	}
+	result, err := bencode_obj.Encode(req)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while converting json to bencode: %v\n", err))
 		return nil
